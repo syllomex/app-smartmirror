@@ -1,6 +1,6 @@
-import { GoogleUser } from "expo-google-app-auth";
-import React, { createContext, useState } from "react";
-import { SetState, UndefinedOrNull } from "../../utils/types";
+import { GoogleUser } from 'expo-google-app-auth';
+import React, { createContext, useState } from 'react';
+import { SetState, UndefinedOrNull } from '../../utils/types';
 
 type AuthContextProps = {
   user: UndefinedOrNull<GoogleUser>;

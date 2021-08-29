@@ -1,18 +1,18 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import * as Google from "expo-google-app-auth";
+import * as Google from 'expo-google-app-auth';
 
-import useAuth from "../contexts/auth/useAuth";
+import useAuth from '../contexts/auth/useAuth';
 
 const googleConfig: Google.GoogleLogInConfig = {
   scopes: [
-    "https://www.googleapis.com/auth/userinfo.profile",
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/gmail.readonly",
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/gmail.readonly',
   ],
   clientId:
-    "1081190011653-7t2emkahe1kod648pm5u5hr89to12uus.apps.googleusercontent.com",
-  language: "pt-BR",
+    '1081190011653-7t2emkahe1kod648pm5u5hr89to12uus.apps.googleusercontent.com',
+  language: 'pt-BR',
 };
 
 export default function useSignIn() {
@@ -21,7 +21,7 @@ export default function useSignIn() {
   const signInWithGoogle = useCallback(async () => {
     const result = await Google.logInAsync(googleConfig);
 
-    if (result.type === "success") {
+    if (result.type === 'success') {
       auth.setUser(result.user);
 
       if (result.accessToken) auth.setGoogleToken(result.accessToken);
