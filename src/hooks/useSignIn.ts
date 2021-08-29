@@ -1,7 +1,8 @@
 import { useCallback } from "react";
-import useAuth from "../contexts/auth/useAuth";
 
 import * as Google from "expo-google-app-auth";
+
+import useAuth from "../contexts/auth/useAuth";
 
 const googleConfig: Google.GoogleLogInConfig = {
   scopes: [
@@ -42,7 +43,6 @@ export default function useSignIn() {
 
       return true;
     } catch (err) {
-      console.log(err.message);
       return false;
     }
   }, []);
