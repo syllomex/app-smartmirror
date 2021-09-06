@@ -24,7 +24,11 @@ export default function useSignIn() {
     if (result.type === 'success') {
       auth.setUser(result.user);
 
-      if (result.accessToken) auth.setGoogleToken(result.accessToken);
+      if (result.accessToken)
+        auth.setGoogleToken({
+          accessToken: result.accessToken,
+          refreshToken: result.refreshToken,
+        });
     }
   }, []);
 
@@ -34,7 +38,7 @@ export default function useSignIn() {
 
       await Google.logOutAsync({
         ...googleConfig,
-        accessToken: auth.googleToken,
+        accessToken: auth.googleToken.accessToken,
       });
 
       auth.setUser(null);
@@ -47,5 +51,9 @@ export default function useSignIn() {
     }
   }, []);
 
-  return { signInWithGoogle, signOut };
+  return {
+    signInWithGoogle,
+    signOut,
+    ...auth,
+  };
 }
