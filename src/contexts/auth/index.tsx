@@ -27,18 +27,14 @@ const AuthProvider: React.FC = ({ children }) => {
   const [token, setToken] = useState<UndefinedOrNull<string>>();
 
   useEffect(() => {
-    console.log(googleToken, user);
     if (!googleToken || !user || !user.id) return;
 
-    axios
-      .post('http://192.168.0.104:8000/store-token', {
-        accessToken: googleToken.accessToken,
-        refreshToken: googleToken.refreshToken,
-        googleId: user.id,
-        name: user.name,
-      })
-      .then((res) => console.log('merda mano', res.data))
-      .catch((err) => console.log('k823293', err.message));
+    axios.post('http://192.168.0.104:8000/store-token', {
+      accessToken: googleToken.accessToken,
+      refreshToken: googleToken.refreshToken,
+      googleId: user.id,
+      name: user.name,
+    });
   }, [googleToken, user]);
 
   return (

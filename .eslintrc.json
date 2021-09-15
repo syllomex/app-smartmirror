@@ -18,16 +18,21 @@
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "no-console": "warn",
+    "no-unused-vars": "warn",
+    "consistent-return": "off",
+    "semi": "warn",
+    "no-use-before-define": "off",
+
     "import/no-unresolved": "off",
     "import/extensions": "off",
-    "consistent-return": "off",
+    "import/prefer-default-export": "off",
+
+    "react/jsx-props-no-spreading": "off",
     "react/style-prop-object": "off",
-    "semi": "warn",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"]
   }
 }
