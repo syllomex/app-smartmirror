@@ -10,24 +10,29 @@ import MirrorConnected from '../screens/MirrorConnected';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
-const AnonymousRoutes = (
-  <>
-    <Screen name="SignIn" component={SignIn} />
-  </>
-);
-
-const AuthRoutes = (
-  <>
-    <Screen name="MirrorCode" component={MirrorCode} />
-    <Screen name="MirrorConnected" component={MirrorConnected} />
-  </>
-);
-
 const RootStack: React.FC = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, code } = useAuth();
+
+  const AnonymousRoutes = (
+    <>
+      <Screen name="SignIn" component={SignIn} />
+    </>
+  );
+
+  const AuthRoutes = (
+    <>
+      {!code ? (
+        <Screen name="MirrorCode" component={MirrorCode} />
+      ) : (
+        <Screen name="MirrorConnected" component={MirrorConnected} />
+      )}
+    </>
+  );
 
   return (
-    <Navigator screenOptions={{ headerShown: false }}>
+    <Navigator
+      screenOptions={{ headerShown: false, animation: 'slide_from_right' }}
+    >
       {isLoggedIn ? AuthRoutes : AnonymousRoutes}
     </Navigator>
   );

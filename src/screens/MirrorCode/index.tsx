@@ -1,19 +1,27 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
+
 import useAuth from '../../contexts/auth/useAuth';
+
 import { api } from '../../services/api';
 
 import { Asterisk, BackgroundImage, Container, Label, Wrapper } from './styles';
 
 const MirrorCode: React.FC = () => {
-  const { user } = useAuth();
+  const { user, googleToken, code, setCode, setMirror } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
   const { navigate } = useNavigation<any>();
+
+  useEffect(() => {
+    if (!user || !googleToken || !code) return;
+
+    navigate('MirrorConnected');
+  }, [user, googleToken, code]);
 
   const handleSubmit = useCallback(async (_code: number) => {
     if (!user) return;
@@ -21,14 +29,15 @@ const MirrorCode: React.FC = () => {
     setLoading(true);
 
     try {
-      const code = _code.toString().padStart(6, '0');
-      const params = { code, googleId: user.id };
-      await api.post('mirrors/connect', params);
+      const codeStr = _code.toString().padStart(6, '0');
+      const params = { code: codeStr, googleId: user.id };
+      const result = await api.post('mirrors/connect', params);
 
       setLoading(false);
-      navigate('MirrorConnected');
+      setCode(codeStr);
+      setMirror(result.data.data);
     } catch (error) {
-      alert(error.response?.data?.message);
+      // console.log(error.message);
       // console.log(error.response?.data);
 
       setLoading(false);
@@ -36,12 +45,12 @@ const MirrorCode: React.FC = () => {
   }, []);
 
   const handleChangeCode = useCallback((text: string) => {
-    const code = +text;
+    const codeNum = +text;
 
     if (Number.isNaN(code)) return;
     if (text.length < 6) return;
 
-    handleSubmit(code);
+    handleSubmit(codeNum);
   }, []);
 
   return (

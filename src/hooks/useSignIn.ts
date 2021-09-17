@@ -41,15 +41,19 @@ export default function useSignIn() {
         accessToken: auth.googleToken.accessToken,
       });
 
+      auth.clearCode();
+
       auth.setUser(null);
       auth.setGoogleToken(null);
       auth.setToken(null);
+      auth.setCode(undefined);
+      auth.setMirror(undefined);
 
       return true;
     } catch (err) {
       return false;
     }
-  }, []);
+  }, [auth]);
 
   return {
     signInWithGoogle,

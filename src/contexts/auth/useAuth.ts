@@ -1,7 +1,16 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { AuthContext } from '.';
+import { api } from '../../services/api';
 
 export default function useAuth() {
   const auth = useContext(AuthContext);
-  return { ...auth, isLoggedIn: !!auth.user };
+
+  const clearCode = useCallback(() => {
+    api.delete('mirrors', { params: { hash: auth.mirror?.hash } });
+
+    auth.setCode(undefined);
+    auth.setMirror(undefined);
+  }, [auth.mirror]);
+
+  return { ...auth, isLoggedIn: !!auth.user, clearCode };
 }
