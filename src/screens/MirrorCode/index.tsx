@@ -1,17 +1,29 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useCallback, useEffect } from 'react';
+import { colors } from '../../assets/colors';
 
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
 
 import useAuth from '../../contexts/auth/useAuth';
+import useSignIn from '../../hooks/useSignIn';
 
 import { api } from '../../services/api';
 
-import { Asterisk, BackgroundImage, Container, Label, Wrapper } from './styles';
+import {
+  Asterisk,
+  BackgroundImage,
+  Container,
+  Label,
+  LogoutContainer,
+  LogoutText,
+  Wrapper,
+} from './styles';
 
 const MirrorCode: React.FC = () => {
   const { user, googleToken, code, setCode, setMirror } = useAuth();
+  const { signOut } = useSignIn();
 
   const [loading, setLoading] = useState(false);
 
@@ -69,6 +81,11 @@ const MirrorCode: React.FC = () => {
           onChangeText={handleChangeCode}
         />
       </Container>
+
+      <LogoutContainer onPress={signOut}>
+        <LogoutText>Sair</LogoutText>
+        <Ionicons name="exit-outline" size={24} color={colors.text_light_1} />
+      </LogoutContainer>
     </Wrapper>
   );
 };
