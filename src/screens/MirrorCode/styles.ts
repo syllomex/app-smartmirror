@@ -43,3 +43,16 @@ export const Label = styled.Text`
 
   margin-bottom: ${rem(1.6)};
 `;
+
+export const LogoutContainer = styled.TouchableOpacity`
+  padding: ${rem(2.4)};
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+`;
+
+export const LogoutText = styled.Text`
+  font-family: 'Quicksand-Regular';
+  color: ${colors.text_light_1};
+  padding-right: ${rem(0.8)};
+`;
