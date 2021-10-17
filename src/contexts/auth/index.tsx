@@ -42,6 +42,10 @@ const key = {
   mirror: '@smartmirror:mirror',
 };
 
+export const clearStorageKeys = async () => {
+  await AsyncStorage.multiRemove([key.user, key.auth, key.code, key.mirror]);
+};
+
 export const AuthContext = createContext({} as AuthContextProps);
 
 const AuthProvider: React.FC = ({ children }) => {
@@ -84,7 +88,7 @@ const AuthProvider: React.FC = ({ children }) => {
       if (!codeStr) return;
       setCode(codeStr);
     })();
-  }, []);
+  }, [googleToken, user]);
 
   useEffect(() => {
     if (!code) return;

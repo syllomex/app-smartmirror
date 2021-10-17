@@ -9,6 +9,7 @@ import * as Quicksand from '@expo-google-fonts/quicksand';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AuthProvider from './src/contexts/auth';
+import { SocketProvider } from './src/hooks/useSocket';
 
 import RootStack from './src/routes/root-stack';
 
@@ -33,10 +34,12 @@ export default function App() {
   if (!loaded) return <AppLoading />;
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <AppComponent />
-      </NavigationContainer>
-    </AuthProvider>
+    <SocketProvider>
+      <AuthProvider>
+        <NavigationContainer>
+          <AppComponent />
+        </NavigationContainer>
+      </AuthProvider>
+    </SocketProvider>
   );
 }

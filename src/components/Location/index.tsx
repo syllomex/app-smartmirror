@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Text } from 'react-native';
 
 import * as GeoLocation from 'expo-location';
 import { LocationObject } from 'expo-location';
@@ -6,7 +7,6 @@ import { LocationObject } from 'expo-location';
 import Button from '../Button';
 import useAuth from '../../contexts/auth/useAuth';
 import { api } from '../../services/api';
-import { Text } from 'react-native';
 
 // import { Container } from './styles';
 
@@ -37,7 +37,7 @@ const Location: React.FC = () => {
         longitude: location.coords.longitude,
       })
       .then((res) => console.log(res.data));
-  }, [location]);
+  }, [user?.id, location]);
 
   console.log(errorMsg);
 

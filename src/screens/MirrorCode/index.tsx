@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useCallback, useEffect } from 'react';
+import { Alert } from 'react-native';
+
 import { colors } from '../../assets/colors';
 
 import Input from '../../components/Input';
@@ -8,8 +10,7 @@ import Loading from '../../components/Loading';
 
 import useAuth from '../../contexts/auth/useAuth';
 import useSignIn from '../../hooks/useSignIn';
-
-import { api } from '../../services/api';
+import { useSocket } from '../../hooks/useSocket';
 
 import {
   Asterisk,
@@ -22,48 +23,67 @@ import {
 } from './styles';
 
 const MirrorCode: React.FC = () => {
-  const { user, googleToken, code, setCode, setMirror } = useAuth();
+  const { user, setCode, setMirror } = useAuth();
   const { signOut } = useSignIn();
+  const { io } = useSocket();
+
+  const [_code, _setCode] = useState('');
 
   const [loading, setLoading] = useState(false);
 
   const { navigate } = useNavigation<any>();
 
   useEffect(() => {
-    if (!user || !googleToken || !code) return;
+    if (_code.length < 6) return;
 
-    navigate('MirrorConnected');
-  }, [user, googleToken, code]);
+    io.on(`from-server.connect:${_code}`, (args) => {
+      setLoading(false);
 
-  const handleSubmit = useCallback(async (_code: number) => {
-    if (!user) return;
+      if (!args) {
+        Alert.alert(
+          'Espelho não encontrado',
+          'Verifique o código e tente novamente.'
+        );
 
-    setLoading(true);
+        return;
+      }
 
-    try {
-      const codeStr = _code.toString().padStart(6, '0');
+      setMirror(args);
+      setCode(_code);
+    });
+
+    return () => {
+      io.off(`from-server.connect:${_code}`);
+    };
+  }, [io, setMirror, _code, navigate, setCode]);
+
+  const handleSubmit = useCallback(
+    async (__code: number) => {
+      if (!user) return;
+
+      const codeStr = __code.toString().padStart(6, '0');
       const params = { code: codeStr, googleId: user.id };
-      const result = await api.post('mirrors/connect', params);
 
-      setLoading(false);
-      setCode(codeStr);
-      setMirror(result.data.data);
-    } catch (error) {
-      // console.log(error.message);
-      // console.log(error.response?.data);
+      setLoading(true);
+      io.emit('from-app.connect', params);
+      _setCode(codeStr);
+    },
+    [io, user]
+  );
 
-      setLoading(false);
-    }
-  }, []);
+  const handleChangeCode = useCallback(
+    (text: string) => {
+      const isNum = /^\d+$/.test(text);
+      if (!isNum && text.length !== 0) return;
 
-  const handleChangeCode = useCallback((text: string) => {
-    const codeNum = +text;
+      _setCode(text);
 
-    if (Number.isNaN(code)) return;
-    if (text.length < 6) return;
+      if (text.length < 6) return;
 
-    handleSubmit(codeNum);
-  }, []);
+      handleSubmit(+text);
+    },
+    [handleSubmit]
+  );
 
   return (
     <Wrapper>
@@ -79,6 +99,7 @@ const MirrorCode: React.FC = () => {
           maxLength={6}
           keyboardType="decimal-pad"
           onChangeText={handleChangeCode}
+          value={_code}
         />
       </Container>
 

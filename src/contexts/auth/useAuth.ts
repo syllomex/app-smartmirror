@@ -10,7 +10,7 @@ export default function useAuth() {
 
     auth.setCode(undefined);
     auth.setMirror(undefined);
-  }, [auth.mirror]);
+  }, [auth]);
 
   return { ...auth, isLoggedIn: !!auth.user, clearCode };
 }

@@ -6,7 +6,8 @@ import useAuth from '../contexts/auth/useAuth';
 
 import SignIn from '../screens/SignIn';
 import MirrorCode from '../screens/MirrorCode';
-import MirrorConnected from '../screens/MirrorConnected';
+
+import Tabs from './tabs';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -24,7 +25,7 @@ const RootStack: React.FC = () => {
       {!code ? (
         <Screen name="MirrorCode" component={MirrorCode} />
       ) : (
-        <Screen name="MirrorConnected" component={MirrorConnected} />
+        <Screen name="MirrorConnected" component={Tabs} />
       )}
     </>
   );
