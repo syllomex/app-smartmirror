@@ -41,6 +41,7 @@ export default function useSignIn() {
 
   const disconnectMirror = useCallback(() => {
     if (!auth?.mirror?.hash) {
+      // eslint-disable-next-line no-console
       console.warn('Could not get mirror hash on disconnect.');
       return false;
     }

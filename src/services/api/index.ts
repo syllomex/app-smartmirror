@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const apiURL = 'http://192.168.0.105:8000';
+const apiURL = 'https://api-smartmirror.herokuapp.com'; // PROD
+// const apiURL = 'http://192.168.0.105:8000'; // LOCAL
 
-// const api = axios.create({ baseURL: 'https://api-smartmirror.herokuapp.com' });
 const api = axios.create({ baseURL: apiURL });
 
 export { api, apiURL };
